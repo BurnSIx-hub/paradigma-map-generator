@@ -3,6 +3,21 @@
 Procedural Foundry VTT (v13/v14) scene generator for local Forgotten Adventures /
 FA Nexus compatible asset libraries (baileywiki-fa-assets layout).
 
+## ⚠️ Requirements / Требуется
+
+**EN:** This module is **code only** — it does **not** bundle or distribute any
+art. It composes maps from asset packs you must own and install yourself:
+**Forgotten Adventures** assets in the `baileywiki-fa-assets` layout and/or the
+**FA Nexus** offline cache. Without those installed, the generator has nothing to
+place. This module ships no third-party art; you are responsible for owning the
+asset packs you use.
+
+**RU:** Это модуль **только с кодом** — он **не** содержит и не распространяет
+никаких артов. Карты собираются из ассет-паков, которые вы устанавливаете сами:
+ассеты **Forgotten Adventures** в раскладке `baileywiki-fa-assets` и/или
+офлайн-кэш **FA Nexus**. Без них генератору нечего расставлять. Чужие арты в
+модуль не входят — за наличие лицензий на ассеты отвечаете вы.
+
 ## What it does
 
 One click creates a ready-to-play scene:
