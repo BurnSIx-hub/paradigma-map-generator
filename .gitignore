@@ -1,0 +1,8 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+
+# Foundry LevelDB pack runtime files
+packs/**/LOCK
+packs/**/*.log

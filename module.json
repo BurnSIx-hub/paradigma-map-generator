@@ -1,0 +1,45 @@
+{
+  "id": "paradigma-map-generator",
+  "title": "🔥 Paradigma Map Generator",
+  "version": "0.19.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "description": "Procedural scene generator using Forgotten Adventures / FA Nexus compatible assets. Generates playable scenes: ground, road, decorations, walls and lights, with FA Nexus drop-shadow integration.",
+  "authors": [
+    {
+      "name": "Vyazn & Claude"
+    }
+  ],
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/paradigma-map-generator.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "path": "lang/ru.json"
+    }
+  ],
+  "relationships": {
+    "recommends": [
+      {
+        "id": "fa-nexus",
+        "type": "module"
+      },
+      {
+        "id": "baileywiki-fa-assets",
+        "type": "module"
+      }
+    ]
+  }
+}

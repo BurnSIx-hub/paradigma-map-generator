@@ -1,0 +1,127 @@
+<div class="pmg-form">
+<p class="pmg-hint">{{localize "paradigma-map-generator.App.Hint"}}</p>
+
+<div class="form-group">
+  <label>{{localize "paradigma-map-generator.App.SceneName"}}</label>
+  <input type="text" name="sceneName" value="{{sceneName}}" />
+</div>
+
+<div class="pmg-grid pmg-grid-3">
+  <div class="form-group">
+    <label>{{localize "paradigma-map-generator.App.Biome"}}</label>
+    <select name="biome">
+      {{#each biomes}}
+        <option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="form-group">
+    <label>{{localize "paradigma-map-generator.App.Season"}}</label>
+    <select name="season">
+      {{#each seasons}}
+        <option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="form-group">
+    <label>{{localize "paradigma-map-generator.App.Time"}}</label>
+    <select name="time">
+      {{#each times}}
+        <option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <label>{{localize "paradigma-map-generator.App.Features"}}</label>
+  <div class="pmg-features">
+    {{#each features}}
+      <label class="checkbox">
+        <input type="checkbox" name="feat-{{this.id}}" {{#if this.checked}}checked{{/if}} />
+        {{this.label}}
+      </label>
+    {{/each}}
+  </div>
+</div>
+
+<div class="pmg-grid pmg-grid-2">
+  <div class="form-group">
+    <label>{{localize "paradigma-map-generator.App.MapSize"}}</label>
+    <select name="mapSize">
+      {{#each mapSizes}}
+        <option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="form-group">
+    <label>{{localize "paradigma-map-generator.App.Fill"}}</label>
+    <select name="fill">
+      {{#each fills}}
+        <option value="{{this.id}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
+  </div>
+</div>
+
+<details class="pmg-advanced">
+  <summary>{{localize "paradigma-map-generator.App.Advanced"}}</summary>
+
+  <div class="pmg-grid">
+    <div class="form-group">
+      <label>{{localize "paradigma-map-generator.App.Width"}}</label>
+      <input type="number" name="width" value="{{width}}" min="12" max="100" step="1" />
+    </div>
+    <div class="form-group">
+      <label>{{localize "paradigma-map-generator.App.Height"}}</label>
+      <input type="number" name="height" value="{{height}}" min="12" max="100" step="1" />
+    </div>
+    <div class="form-group">
+      <label>{{localize "paradigma-map-generator.App.Grid"}}</label>
+      <input type="number" name="gridSize" value="{{gridSize}}" min="50" max="300" step="10" />
+    </div>
+    <div class="form-group">
+      <label>{{localize "paradigma-map-generator.App.Density"}}</label>
+      <input type="number" name="density" value="{{density}}" min="0.25" max="3" step="0.25" />
+    </div>
+  </div>
+  <p class="notes">{{localize "paradigma-map-generator.App.CustomSizeHint"}}</p>
+
+  <div class="form-group">
+    <label>{{localize "paradigma-map-generator.App.Seed"}}</label>
+    <input type="text" name="seed" value="{{seed}}" placeholder="{{localize 'paradigma-map-generator.App.SeedPlaceholder'}}" />
+  </div>
+
+  <div class="form-group">
+    <label>{{localize "paradigma-map-generator.App.AssetRoot"}}</label>
+    <input type="text" name="assetRoot" value="{{assetRoot}}" />
+    <p class="notes">{{localize "paradigma-map-generator.App.AssetRootHint"}}</p>
+  </div>
+
+  <div class="pmg-row">
+    <label class="checkbox">
+      <input type="checkbox" name="activate" {{#if activate}}checked{{/if}} />
+      {{localize "paradigma-map-generator.App.Activate"}}
+    </label>
+    <button type="button" data-action="scan">
+      <i class="fas fa-magnifying-glass"></i> {{localize "paradigma-map-generator.App.Scan"}}
+    </button>
+  </div>
+
+  <div class="pmg-row">
+    <button type="button" data-action="saveProp">
+      <i class="fa-solid fa-floppy-disk"></i> {{localize "paradigma-map-generator.App.SaveProp"}}
+    </button>
+    <button type="button" data-action="managePresets">
+      <i class="fa-solid fa-list"></i> {{localize "paradigma-map-generator.App.ManagePresets"}}
+    </button>
+  </div>
+  <p class="notes">{{localize "paradigma-map-generator.App.SavePropHint"}}</p>
+</details>
+
+<footer class="pmg-footer">
+  <button type="submit">
+    <i class="fa-solid fa-wand-magic-sparkles"></i> {{localize "paradigma-map-generator.App.Generate"}}
+  </button>
+</footer>
+</div>

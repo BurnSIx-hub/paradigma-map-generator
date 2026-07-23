@@ -1,0 +1,95 @@
+.paradigma-map-generator .pmg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.paradigma-map-generator .pmg-hint {
+  margin: 0 0 4px;
+  opacity: 0.82;
+}
+
+.paradigma-map-generator .pmg-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.paradigma-map-generator .pmg-grid .form-group {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.paradigma-map-generator .pmg-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.paradigma-map-generator .pmg-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.paradigma-map-generator .pmg-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.paradigma-map-generator .pmg-features .checkbox {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+}
+
+.paradigma-map-generator .pmg-row {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.paradigma-map-generator .pmg-row button {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.paradigma-map-generator .pmg-advanced {
+  border: 1px solid var(--color-border-light-tertiary, #4b4a44);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.paradigma-map-generator .pmg-advanced summary {
+  cursor: pointer;
+  font-weight: bold;
+  opacity: 0.85;
+}
+
+.paradigma-map-generator .pmg-advanced[open] summary {
+  margin-bottom: 8px;
+}
+
+.paradigma-map-generator .pmg-advanced .form-group,
+.paradigma-map-generator .pmg-advanced .pmg-grid,
+.paradigma-map-generator .pmg-advanced .pmg-row {
+  margin: 6px 0;
+}
+
+.paradigma-map-generator .pmg-saveprop {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.paradigma-map-generator .pmg-footer {
+  margin-top: 4px;
+}
+
+.paradigma-map-generator .pmg-footer button {
+  width: 100%;
+}
+
+.paradigma-map-generator .notes {
+  font-size: 12px;
+  line-height: 1.25;
+  margin: 3px 0 0;
+  opacity: 0.72;
+}
