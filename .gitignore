@@ -6,3 +6,6 @@ Thumbs.db
 # Foundry LevelDB pack runtime files
 packs/**/LOCK
 packs/**/*.log
+
+# Release build artifacts
+release/
