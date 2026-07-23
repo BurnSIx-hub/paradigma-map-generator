@@ -85,7 +85,8 @@ Hooks.once("i18nInit", () => {
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {
-  return; // кнопка переехала в группу 🔥 Burn (BurnHub)
+  if (game.modules.get("burnhub")?.active) return; // с BurnHub кнопка в папке 🔥 Burn
+  if (!game.user?.isGM) return; // без BurnHub — своя кнопка (как раньше, только ГМ)
 
   const tool = {
     name: MODULE_ID,
