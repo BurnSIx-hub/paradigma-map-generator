@@ -82,6 +82,15 @@ Hooks.once("i18nInit", () => {
     type: Boolean,
     default: true
   });
+
+  game.settings.register(MODULE_ID, "borderWalls", {
+    name: i18n("Settings.BorderWalls.Name"),
+    hint: i18n("Settings.BorderWalls.Hint"),
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {

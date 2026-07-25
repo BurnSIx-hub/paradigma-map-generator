@@ -29,7 +29,7 @@ export const BIOMES = {
       tracks: ["tracks"]
     },
     scatter: [
-      { buckets: ["trees_pine", "trees"], per100: 4.2, layer: "tall", overhead: true, avoid: ["road", "reserved", "object"], maxCells: 6, scale: [0.9, 1.15], families: 3, cluster: true },
+      { buckets: ["trees_pine", "trees"], per100: 4.2, layer: "tall", overhead: true, avoid: ["road", "reserved", "object"], maxCells: 6, scale: [0.9, 1.15], families: 3, cluster: true, tonePrefer: "green" },
       { buckets: ["bushes"], per100: 2.2, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 3, scale: [0.85, 1.2], families: 2, cluster: true, tonePrefer: "green" },
       { buckets: ["rocks"], per100: 1.0, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 4, scale: [0.7, 1.1], families: 2 },
       { buckets: ["flowers"], per100: 1.2, layer: "flat", avoid: ["road", "reserved"], maxCells: 2, scale: [0.8, 1.2], families: 2, cluster: true },
@@ -38,6 +38,39 @@ export const BIOMES = {
       { buckets: ["logs", "stumps"], per100: 0.5, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 4, scale: [0.85, 1.1], families: 2 },
       { buckets: ["sticks"], per100: 0.8, layer: "flat", avoid: ["reserved"], maxCells: 3, scale: [0.8, 1.2], families: 2 },
       { buckets: ["leaves"], per100: 0.9, layer: "flat", avoid: ["reserved"], maxCells: 4, scale: [0.9, 1.3], families: 2, cluster: true, tonePrefer: "green" }
+    ]
+  },
+
+  darkforest: {
+    ground: "grass",                 // fallback if the Woodlands pack isn't installed
+    groundBucket: "ground_darkforest",
+    groundTint: "#949a7a",           // deepen the floor to a mossy, gloomy green
+    darkness: 0.35,                  // dim but playable; dusk/night add more
+    globalLight: true,
+    allowedTones: ["green", "neutral", "autumn"],
+    wallTonePrefer: /slate|gray|stone|volcanic|earthy/,
+    road: {
+      brush: "road_brush_forest",     // textured muddy trail, not a flat brown band
+      brushTint: "#7a6850",           // muddy, gloom-matched
+      tint: "#544a3a",                // fallback if the Woodlands pack isn't installed
+      halfWidth: [1.2, 1.6],
+      verge: ["bushes", "mushrooms"],
+      debris: ["sticks", "logs", "rocks"],
+      tracks: ["tracks"]
+    },
+    scatter: [
+      // Dead bare trees claim space FIRST — they're huge (8-12 cells), so if
+      // placed after the dense pines they never find clearance and vanish. This
+      // asset set has no autumn-canopy trees (only pines + bare), so a gloomy /
+      // autumn forest reads through bare dead trees + fallen leaves.
+      { buckets: ["trees_bare"], per100: 1.9, layer: "tall", elevation: 20, avoid: ["road", "reserved", "object"], minCells: 6, maxCells: 12, scale: [0.7, 1.0], families: 3, cluster: true },
+      { buckets: ["trees_pine", "trees"], per100: 2.2, layer: "tall", overhead: true, avoid: ["road", "reserved", "object"], maxCells: 6, scale: [0.9, 1.15], families: 2, cluster: true },
+      { buckets: ["bushes"], per100: 1.6, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 3, scale: [0.85, 1.2], families: 2, cluster: true, tonePrefer: "green" },
+      { buckets: ["logs", "stumps"], per100: 1.1, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 4, scale: [0.85, 1.15], families: 2 },
+      { buckets: ["rocks"], per100: 1.0, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 4, scale: [0.7, 1.1], families: 2 },
+      { buckets: ["mushrooms"], per100: 0.7, layer: "flat", avoid: ["road", "reserved"], maxCells: 2, scale: [0.7, 1.15], families: 1, cluster: true },
+      { buckets: ["leaves"], per100: 1.6, layer: "flat", avoid: ["reserved"], maxCells: 4, scale: [0.9, 1.3], families: 2, cluster: true, tonePrefer: "autumn" },
+      { buckets: ["sticks"], per100: 1.0, layer: "flat", avoid: ["reserved"], maxCells: 3, scale: [0.8, 1.2], families: 2 }
     ]
   },
 
@@ -58,7 +91,7 @@ export const BIOMES = {
     },
     scatter: [
       { buckets: ["trees_snow"], per100: 1.6, layer: "tall", overhead: true, avoid: ["road", "reserved", "object"], minCells: 6, maxCells: 12, scale: [0.65, 0.85], families: 3, cluster: true },
-      { buckets: ["trees_bare"], per100: 0.5, layer: "tall", avoid: ["road", "reserved", "object"], minCells: 6, maxCells: 12, scale: [0.6, 0.8], families: 2, cluster: true },
+      { buckets: ["trees_bare"], per100: 0.5, layer: "tall", elevation: 20, avoid: ["road", "reserved", "object"], minCells: 6, maxCells: 12, scale: [0.6, 0.8], families: 2, cluster: true },
       { buckets: ["trees_snow"], per100: 0.7, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 5, scale: [0.8, 1.0], families: 2, cluster: true },
       { buckets: ["bushes_snow"], per100: 1.8, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 3, scale: [0.85, 1.2], families: 2, cluster: true },
       { buckets: ["rocks_snow", "rocks"], per100: 1.0, layer: "mid", avoid: ["road", "reserved", "object"], maxCells: 4, scale: [0.7, 1.1], families: 2 },
@@ -142,11 +175,12 @@ export const TIMES = { day: 0, dusk: 0.45, night: 0.8 };
 export const SEASONS = {
   none: {},
   autumn: {
-    // Forest only: warm palette, falling leaves, some bare crowns
-    tonePreferOverride: { bushes: "autumn", leaves: "autumn", flowers: "autumn" },
+    // Warm palette: bushes, leaves, flowers AND tree canopies turn autumn
+    // (the Woodlands Tree_Red/Multicolor give red crowns to prefer).
+    tonePreferOverride: { bushes: "autumn", leaves: "autumn", flowers: "autumn", trees: "autumn" },
     extraScatter: [
       { buckets: ["leaves"], per100: 1.8, layer: "flat", avoid: ["reserved"], maxCells: 4, scale: [0.9, 1.3], families: 2, cluster: true, tonePrefer: "autumn" },
-      { buckets: ["trees_bare"], per100: 0.5, layer: "tall", avoid: ["road", "reserved", "object"], minCells: 6, maxCells: 12, scale: [0.6, 0.8], families: 2, cluster: true }
+      { buckets: ["trees_bare"], per100: 0.5, layer: "tall", elevation: 20, avoid: ["road", "reserved", "object"], minCells: 6, maxCells: 12, scale: [0.6, 0.8], families: 2, cluster: true }
     ]
   }
 };
@@ -176,6 +210,7 @@ export const TIME_IDS = Object.keys(TIMES);
  */
 export const BIOME_META = {
   forest: { seasons: ["none", "autumn"], time: true, features: ["road", "camp", "ruins", "tavern", "graveyard", "lake", "building"] },
+  darkforest: { seasons: ["none", "autumn"], time: true, features: ["road", "camp", "ruins", "tavern", "graveyard", "lake", "building"] },
   winter: { seasons: ["none"], time: true, features: ["road", "camp", "ruins", "tavern", "graveyard", "lake", "building"] },
   desert: { seasons: ["none"], time: true, features: ["road", "camp", "ruins", "tavern", "graveyard", "lake", "building"] },
   arena: { seasons: ["none"], time: true, features: [] },
@@ -191,6 +226,8 @@ export function composeTags({ biome = "forest", season = "none", time = "day", f
     tags: { biome, season, time, features: chosen },
     special: b.special ?? null,
     biome: b.ground,
+    groundBucket: b.groundBucket ?? null,
+    groundTint: b.groundTint ?? null,
     darkness: Math.max(b.darkness, TIMES[time] ?? 0),
     globalLight: b.globalLight,
     allowedTones: b.allowedTones,
@@ -210,7 +247,7 @@ export function composeTags({ biome = "forest", season = "none", time = "day", f
   };
 
   const s = SEASONS[season] ?? {};
-  if (biome === "forest") {
+  if (biome === "forest" || biome === "darkforest") {
     if (s.tonePreferOverride) {
       for (const def of plan.scatter) {
         for (const [bucket, tone] of Object.entries(s.tonePreferOverride)) {

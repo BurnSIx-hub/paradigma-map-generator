@@ -174,6 +174,8 @@ const BIOME_RE = /\/maps\/([^/]+)\/[^/]+$/;
 const EXTRA_RULES = [
   { bucket: "road_brush_snow", test: (p) => p.includes("/textures/snow/") && p.includes("disturbed") },
   { bucket: "road_brush_desert", test: (p) => p.includes("/textures/sand/") && p.includes("cracked") },
+  // Dark-forest trail: Woodlands dirt (cracked / grassy) as the road brush
+  { bucket: "road_brush_forest", test: (p) => p.includes("/woodlands/") && p.includes("/textures/dirt/") },
   { bucket: "tracks_sand",   test: (p) => p.includes("tracks_sand_") },
   { bucket: "snow_piles",    test: (p) => p.includes("snow_pile") },
   { bucket: "snow_overlays", test: (p) => p.includes("snow_patchy_overlay") },
@@ -181,6 +183,14 @@ const EXTRA_RULES = [
   { bucket: "tracks_snow",   test: (p) => p.includes("tracks") && p.includes("snow") },
   // Water / ice surface textures (tiling .jpg) used as the lake fill. Accessed
   // directly via lib.buckets (no _WxH footprint, so entries() would skip them).
+  // Dark-forest floor texture (Woodlands pack): leafy forest floor / grassy dirt
+  { bucket: "ground_darkforest", test: (p) => p.includes("/woodlands/") && (p.includes("/textures/forest/") || p.includes("/textures/dirt/grassy")) },
+  // Woodlands trees add the variety baileywiki lacks (only 3 pines): red/autumn
+  // and multicolor canopies, plus more bare trees / logs / stumps.
+  { bucket: "trees_bare", test: (p) => p.includes("/woodlands/") && p.includes("/flora/trees/bare_trees/") },
+  { bucket: "logs",       test: (p) => p.includes("/woodlands/") && p.includes("/flora/trees/logs/") },
+  { bucket: "stumps",     test: (p) => p.includes("/woodlands/") && p.includes("/flora/trees/stumps/") },
+  { bucket: "trees",      test: (p) => p.includes("/woodlands/") && p.includes("/flora/trees/") },
   { bucket: "water_forest",  test: (p) => p.includes("/aquatic/") && p.includes("/textures/water/") },
   { bucket: "water_desert",  test: (p) => p.includes("/desert/") && p.includes("/textures/water/") },
   { bucket: "water_ice",     test: (p) => p.includes("/arctic/") && p.includes("/textures/ice/") },

@@ -2,7 +2,7 @@
 
 Файл-передача контекста между чатами. Проект: модуль Foundry VTT **paradigma-map-generator**
 (`E:\FoundryVTT\Data\modules\paradigma-map-generator`), автор Vyazn + Claude.
-Текущая версия: **0.19.0**. Система игры пользователя: **dnd5e**. Item Piles v3.3.2.
+Текущая версия: **0.20.4**. Система игры пользователя: **dnd5e**. Item Piles v3.3.2.
 Сундук-контейнер РАБОТАЕТ (картинка/звук/лут). Сундук повёрнут лицом к двери:
 арт смотрит на юг при rotation 0, направление проёма комнаты (floor-клетка снаружи
 стены, ближайшая к сундуку) → `{south:0,west:90,north:180,east:270}` в token.rotation. Foundry **v14** (14.364), данные в `E:\FoundryVTT\Data`,
@@ -22,7 +22,7 @@
   Динамический UI: `#syncBiomeControls()` скрывает сезон/время/фичи по `BIOME_META`.
   Простые настройки (размер карты/насыщенность селектами) + `<details>` «Расширенные».
   Кнопки: «Сохранить выделение как пресет», «Мои пресеты» (список/удаление).
-- `scripts/presets.mjs` — конструктор тегов: `BIOMES` (forest/winter/desert/arena/dungeon),
+- `scripts/presets.mjs` — конструктор тегов: `BIOMES` (forest/darkforest/winter/desert/arena/dungeon),
   `SEASONS` (none/autumn), `TIMES` (day/dusk/night → darkness), `FEATURE_IDS`
   (road/camp/ruins/tavern/graveyard/deeper/lake/building/treasure), `BIOME_META` (оси биома),
   `composeTags()` собирает план генерации. `LEGACY_PRESETS` — совместимость API.
@@ -110,17 +110,38 @@
   (max/min ≤1.4): вытянутые 1x2/1x4 пальмовые стволы = вид сбоку («лежащая пальма»),
   не срез. Размер ~0.28 кроны, кэп 1.8 клетки. Пень БЕЗ случайного поворота
   (rotation 0): у части срезов кругляш нарисован не по центру спрайта, и поворот
-  «выкидывал» его вбок (~15% «уехал влево»). **Голые деревья (`trees_bare`) НЕ
-  overhead** — листвы нет, прятать нечего, пень посреди веток смотрится дико.
+  «выкидывал» его вбок (~15% «уехал влево»). **Голые деревья (`trees_bare`): флаг
+  `elevation: 20` (НЕ overhead)** — только высота, БЕЗ затухания и БЕЗ пня (пень
+  посреди голых веток смотрится дико; финал. решение юзера v0.20.4). В runScatter:
+  `def.overhead` → {elevation:20, occlusion:"fade"}+пень; иначе `def.elevation` → просто высота.
   (Пробовал в 0.15.5 дробить `Snow_Trees` по подпапкам — юзер откатил, вернул
   единое правило `trees_snow` = вся папка snow_trees overhead+пень.)
 - AppV2 части шаблона — один корневой элемент.
 - Настройки регистрировать в `i18nInit` (в `init` переводы ещё не загружены).
+- Стена по границе карты: настройка `borderWalls` (Boolean, default true) → 4
+  `ctx.addWall` по периметру `pxW×pxH` в конце generateScene (до оффсета ox/oy).
 - FilePicker: `foundry.applications.apps.FilePicker.implementation`.
 - FA Nexus тени: `flags["fa-nexus"]` = {shadow:true, shadowAlpha:.55, shadowDilation:1.6,
   shadowBlur:2.2, shadowOffsetDistance:PX(!), shadowOffsetAngle:135, offsetX/Y=cos/sin*dist}.
   **offsetDistance в пикселях, при 0 тень не видна** (прячется под ассетом).
   В коде: "tall" = 0.22*grid, "mid" = 0.11*grid.
+
+## Биом «Тёмный лес» (darkforest)
+
+Мрачный лес: земля — лесная подстилка из Woodlands-пака (бакет `ground_darkforest`,
+fa-nexus .jpg без footprint, берётся напрямую в placeGround) + тинт `groundTint`
+для мшистости; darkness 0.35 базово (dusk/night добавляют). Много голых/мёртвых
+деревьев (trees_bare) + тёмная хвоя, грибы, коряги, палая листва (осень включаема).
+Новые поля биома: `groundBucket`/`groundTint` (прокинуты через composeTags →
+placeGround применяет tint к тайлам земли). Осенний override composeTags расширен
+на darkforest. Если Woodlands-пак не стоит — fallback на grass + тинт.
+**Важно про деревья:** в baileywiki ТОЛЬКО 3 ёлки (`Pine_Green`), бакет `trees`
+пуст → лес был монотонный. Добавил EXTRA_RULES для Woodlands: `Tree_Red`/`Tree_Multicolor`
+→ `trees` (красные осенние + пёстрые кроны), Woodlands bare/logs/stumps → свои бакеты.
+Осень: `tonePreferOverride` теперь включает `trees:"autumn"` → кроны краснеют. Лес
+получил `tonePrefer:"green"` (летом зелёный, осенью override→autumn); darkforest без
+tonePrefer = смешанные кроны всегда. Голые деревья ОГРОМНЫЕ (8-12 клеток) — ставить
+ПЕРВЫМИ (до плотных ёлок), иначе не находят чистого места и не спавнятся вообще.
 
 ## Как устроена генерация (порядок)
 

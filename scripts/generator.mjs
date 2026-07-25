@@ -437,8 +437,17 @@ class GenerationContext {
 /* -------------------------------- Ground -------------------------------- */
 
 function placeGround(ctx, biome) {
-  const src = ctx.lib.ground[biome] ?? ctx.lib.ground.grass ?? Object.values(ctx.lib.ground)[0];
+  // A biome may point at its own texture bucket (e.g. dark-forest floor from the
+  // Woodlands pack) with an optional tint; fall back to the /Maps/ ground.
+  const pd = ctx.presetData;
+  let src = null;
+  if (pd?.groundBucket) {
+    const list = ctx.lib.buckets?.[pd.groundBucket];
+    if (list?.length) src = ctx.rng.pick(list).src;
+  }
+  src = src ?? ctx.lib.ground[biome] ?? ctx.lib.ground.grass ?? Object.values(ctx.lib.ground)[0];
   if (!src) return;
+  const tint = pd?.groundTint ?? null;
   // Equal-sized chunks (no squeezed leftover column at the edges) +
   // mirror tiling: alternate chunks are flipped, so adjacent borders always
   // match pixel-for-pixel and the repeat seams disappear
@@ -454,7 +463,8 @@ function placeGround(ctx, biome) {
           anchorX: 0.5,
           anchorY: 0.5,
           scaleX: ix % 2 ? -1 : 1,
-          scaleY: iy % 2 ? -1 : 1
+          scaleY: iy % 2 ? -1 : 1,
+          ...(tint ? { tint } : {})
         },
         x: Math.round((ix + 0.5) * wPx),
         y: Math.round((iy + 0.5) * hPx),
@@ -883,14 +893,21 @@ function runScatter(ctx, def, densityMult) {
     }
 
     // Tall assets keep their baked shadow direction — only a slight jitter,
-    // otherwise the lighting looks inconsistent across the map. Tree canopies
-    // (def.overhead) rise to 20ft and fade when a token stands under them.
+    // otherwise the lighting looks inconsistent across the map.
+    //  - def.overhead: canopy rises to 20ft, FADES under a token, and gets a
+    //    stump (leafy trees).
+    //  - def.elevation: just raised to that height, NO fade, NO stump (bare
+    //    trees — the user wants them elevated but a stump amid the branches
+    //    looks wrong).
+    const raise = def.overhead
+      ? { elevation: 20, occlusion: "fade" }
+      : (def.elevation ? { elevation: def.elevation } : {});
     ctx.addTile(entry, centerX, centerY, {
       scale,
       rotation: tall ? ctx.rng.float(-12, 12) : ctx.rng.float(0, 360),
       sort: sortBase + cy,
       shadow: def.layer === "flat" ? false : def.layer,
-      ...(def.overhead ? { elevation: 20, occlusion: "fade" } : {})
+      ...raise
     });
 
     if (def.layer !== "flat") {
@@ -3238,6 +3255,15 @@ export async function generateScene(options = {}) {
   const audioKey = preset.tags?.biome ?? preset.special ?? preset.biome;
   const bedRadius = Math.sqrt(ctx.cellsW ** 2 + ctx.cellsH ** 2) * 0.6;
   ctx.addSound(ctx.pxW() / 2, ctx.pxH() / 2, bedRadius, ctx.audioFor(audioKey), { volume: 0.5, walls: false, easing: false });
+
+  // Plain wall around the map edge so tokens can't wander off (toggle setting)
+  if (game.settings.get(MODULE_ID, "borderWalls")) {
+    const pw = ctx.pxW(), ph = ctx.pxH();
+    ctx.addWall(0, 0, pw, 0);
+    ctx.addWall(pw, 0, pw, ph);
+    ctx.addWall(pw, ph, 0, ph);
+    ctx.addWall(0, ph, 0, 0);
+  }
 
   if (ctx.missingBuckets.size) {
     console.warn(`${MODULE_ID} | Missing asset buckets:`, [...ctx.missingBuckets]);
